@@ -1,0 +1,69 @@
+# Defines the branch name and feature folder name format that SDD skills
+# (speckit-specify, speckit-plan, speckit-tasks, speckit-implement) use when
+# creating feature branches and folders, and the branch name speckit-implement
+# uses per task when implementing tasks.md in the target code repository.
+# This file lives under .prism/config/, so Prism CLI seeds it once (on init,
+# or on update for a repo that predates it) and never overwrites it again —
+# it's your team's customization surface.
+#
+# TOKENS
+# ------
+# sddBranchFormat and featureFolderFormat may reference these tokens:
+#   <type>   - the change type: feat, fix, chore, docs, refactor, perf, test.
+#              Defaulted from the feature description unless the user states otherwise.
+#   <phase>  - optional. The SDD phase that created/owns the branch: spec, plan,
+#              tasks, or impl (matching speckit-specify, speckit-plan,
+#              speckit-tasks, speckit-implement). Omit it from a format entirely
+#              if your team doesn't need per-phase branches.
+#   <feature> - the kebab-case short feature name, e.g. user-dashboard. Always present.
+#
+# taskBranchFormat may reference these tokens:
+#   <type>   - the same change type as above, carried over from the feature branch.
+#   <task>   - the kebab-case short task name, e.g. add-login-endpoint. Always present.
+#
+# Sequential numbers and timestamps are intentionally NOT supported as tokens:
+# they would let a feature's branches drift to different feature folders
+# (e.g. 001-user-dashboard vs 002-user-dashboard) instead of all aligning to
+# the same specs/<feature> folder.
+#
+# DISABLING AUTOMATIC BRANCHING
+# ------------------------------
+# Set sddBranchFormat and/or taskBranchFormat to an empty string ("") if your
+# team doesn't want SDD skills to create or switch branches automatically for
+# that scope — they will leave whatever branch is already checked out alone.
+# featureFolderFormat has no such opt-out: the feature folder is always created.
+#
+# EXAMPLES
+# --------
+#   sddBranchFormat: "<type>/<feature>"          -> feat/user-dashboard
+#   sddBranchFormat: "<type>/<phase>-<feature>"  -> feat/spec-user-dashboard, feat/plan-user-dashboard, ...
+#   taskBranchFormat: "<type>/<task>"            -> feat/add-login-endpoint
+#
+# MONO-REPOS
+# ----------
+# If this solution is a mono-repo hosting multiple products/services, consider
+# "<type>/<phase>-<feature>" so SDD branches are clearly separated, by phase, both
+# from each other (the spec branch vs. the eventual implementation branch for
+# the same feature) and from ordinary development branches that don't carry a
+# <phase> segment at all.
+#
+# FEATURE FOLDERS
+# ----------------
+# Feature folders always live under /specs/ — only the segment below /specs/ is
+# configurable via featureFolderFormat. It is recommended to leave this as just
+# "<feature>" (no <type> or <phase>) so every SDD branch for a feature (spec, plan,
+# tasks, implement) resolves to the same specs/<feature> folder, even when their
+# sddBranchFormat differs by <type> or <phase>.
+# Note that sddBranchFormat is only applied if the default (master/main) branch
+# is active - otherwise it will use the defined existing branch.
+#
+# TASK BRANCHES
+# -------------
+# taskBranchFormat is independent of sddBranchFormat/featureFolderFormat: it
+# controls the branch speckit-implement creates per task, in the target
+# code-role repository, while working through tasks.md. It never affects the
+# specs/<feature> feature folder or the SDD artifact branches above.
+
+sddBranchFormat: "<type>/<feature>"   # e.g. feat/user-dashboard branch
+featureFolderFormat: "<feature>"      # e.g. specs/user-dashboard folder
+taskBranchFormat: "<type>/<task>"     # e.g. feat/add-login-endpoint branch

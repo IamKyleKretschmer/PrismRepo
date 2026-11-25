@@ -1,0 +1,71 @@
+# yaml-language-server: $schema=./repos.schema.json
+# This file identifies the repositories in the Prism solution by ROLE.
+# The property under which a repository is listed determines its role
+# (see docs/prism/glossary.md for the canonical role/topology definitions):
+#   - prism            -> the `prism` role  (holds the Prism framework, constitution, SDD artefacts). Exactly one.
+#   - coreSolutionRepos -> the `code` role (product source code that features are implemented against).
+#   - contextRepos     -> the `context` role (read-only external references).
+#
+# TOPOLOGIES:
+#   - multi-repo:  the `prism`-role repository is separate from one or more `code`-role repositories.
+#   - single-repo: ONE repository holds BOTH the `prism` and `code` roles. To configure single-repo,
+#                  list that same repository under `prism` AND as the sole `coreSolutionRepos` entry.
+#                  Example (single-repo):
+#                    prism:
+#                      name: acme-app
+#                      path: .
+#                    coreSolutionRepos:
+#                      - name: acme-app
+#                        path: .
+#                        description: The one repository holding both the prism and code roles.
+#                  (In single-repo you do NOT need to run /generate-context-prism.)
+
+# `prism` identifies the repository holding the `prism` role. Exactly one.
+prism:
+  name: #the `prism`-role repository name
+  path: .
+
+# `coreSolutionRepos` identifies the repositories holding the `code` role.
+# These repos are owned by the team and will have code written to them.
+# They must be local repos on disk to allow for the full development experience.
+# In a single-repo topology, list the one repository here (the same one listed under `prism`).
+# Required fields: 
+# - name - repo name as shown in ADO or github - eg. orders-api
+# - path - path to local repo - eg. ../orders-api
+# Optional fields: 
+# - description - a brief description of the repo and its intended purpose
+
+coreSolutionRepos:
+  - name: 
+    path: 
+    description: 
+
+# Context repos are read-only repos used for product context.
+# Required fields: 
+# - name - repo name as shown in ADO or github
+# - source or path 
+#   - path is for local repos on file system - eg. ../vibranium-api
+#   - source is for remote repos. Source requires:
+#     - type (eg. azure-devops, github)
+#     - url (the URL of the repository) - eg. https://nintex.visualstudio.com/Nintex/_git/platform-contracts
+#     - branch (the branch to use)
+# Optional fields: contextPath, description
+# - contextPath: the path within the repository to use as progressive disclosure 
+#     context - eg .context
+#       - do not define a remote context repo without a contextPath or it will attempt to pull the whole repo!
+# - description: a brief description of the repo and its intended context.
+
+# None yet. To add one, replace [] with entries like these (one remote, one local):
+#   - name:
+#     source:
+#       type:
+#       url:
+#       branch:
+#     contextPath:
+#     description:
+#   - name:
+#     path:
+#     contextPath:
+#     description:
+contextRepos: []
+

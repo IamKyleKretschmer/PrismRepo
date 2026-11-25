@@ -1,0 +1,103 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "definitions": {
+        "LocalRepo": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "Name as shown in ADO or github\n\nExample: orders-api"
+                },
+                "path": {
+                    "type": "string",
+                    "description": "Relative path to local repo (on file system)\n\nExample: ../orders-api"
+                },
+                "contextPath": {
+                    "type": "string",
+                    "description": "(Used for context repos) The relative path within the repository to use as progressive disclosure context.\n\nExample: .context\n\nWARNING: Do not define a remote context repo without a contextPath or it will attempt to pull the whole repo!"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "A brief description of the repo and its intended purpose."
+                }
+            },
+            "required": [ "name", "path" ],
+            "additionalProperties": false
+        },
+        "RemoteRepo": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "Name as shown in ADO or github\n\nExample: orders-api"
+                },
+                "source": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "enum": ["azure-devops", "github"]
+                        },
+                        "url": {
+                            "type": "string",
+                            "description": "URL of the repository.\n\nExample: https://nintex.visualstudio.com/Nintex/_git/platform-contracts"
+                        },
+                        "branch": {
+                            "type": "string",
+                            "description": "Branch to use.\n\nExample: main"
+                        }
+                    },
+                    "required": ["type", "url", "branch"],
+                    "additionalProperties": false
+                },
+                "contextPath": {
+                    "type": "string",
+                    "description": "(Used for context repos) The relative path within the repository to use as progressive disclosure context.\n\nExample: .context\n\nWARNING: Do not define a remote context repo without a contextPath or it will attempt to pull the whole repo!"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "A brief description of the repo and its intended context."
+                }
+            },
+            "required": [ "name", "source", "contextPath" ],
+            "additionalProperties": false
+        }
+    },
+    "properties": {
+        "prism": {
+            "type": "object",
+            "description": "Identifies the repository holding the `prism` role. Exactly one.",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "Name as shown in ADO or github\n\nExample: team-name-prism"
+                },
+                "path": {
+                    "type": "string",
+                    "description": "Relative path to local prism repo (on file system)\n\nExample: ."
+                }
+            }
+        },
+        "coreSolutionRepos": {
+            "type": "array",
+            "description": "Identifies the repositories holding the `code` role.\n\nThese repos are owned by the team and will have code written to them. They must be local repos on disk to allow for the full development experience. In a single-repo topology, list the one repository here (the same one listed under `prism`).",
+            "items": {
+                "anyOf": [
+                    { "$ref": "#/definitions/LocalRepo" }
+                ]
+            }
+        },
+        "contextRepos": {
+            "type": "array",
+            "description": "Context repos are read-only repos used for product context.",
+            "items": {
+                "anyOf": [
+                    { "$ref": "#/definitions/LocalRepo" },
+                    { "$ref": "#/definitions/RemoteRepo" }
+                ]
+            }
+        }
+    },
+    "required": ["prism", "coreSolutionRepos", "contextRepos"],
+    "additionalProperties": false
+}

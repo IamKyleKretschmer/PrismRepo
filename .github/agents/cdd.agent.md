@@ -1,0 +1,13 @@
+---
+name: cdd
+description: >
+  Follow repository-specific development guidelines from AGENTS.md.
+  Use for context-driven development (CDD) within a Prism solution.
+argumentHint: >
+  Describe the development task or feature you're working on (e.g., "implement user authentication",
+  "refactor payment service", "add unit tests for OrderService").
+---
+
+In Prism's skills, agents and the files they reference, `<PRISM_ROOT>` means the root of this repository. Substitute it before reading files or running commands.
+
+Follow the agent instructions defined in [sdd](../../.claude/skills/cdd/SKILL.md) 

@@ -1,0 +1,13 @@
+{
+  "extraKnownMarketplaces": {
+    "nintex-skills": {
+      "source": {
+        "source": "github",
+        "repo": "NintexGlobal/rnd-nintex-skills"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "engineering-standards@nintex-skills": true
+  }
+}

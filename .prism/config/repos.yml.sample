@@ -1,0 +1,79 @@
+# This file identifies the repositories in the Prism solution by ROLE.
+# The property under which a repository is listed determines its role
+# (see docs/prism/glossary.md for the canonical role/topology definitions):
+#   - prism            -> the `prism` role  (Prism framework, constitution, SDD artefacts). Exactly one.
+#   - coreSolutionRepos -> the `code` role (product source code).
+#   - contextRepos     -> the `context` role (read-only external references).
+#
+# This sample shows a MULTI-REPO topology (the `prism`-role repository is separate
+# from the `code`-role repositories). For a SINGLE-REPO topology, one repository
+# holds BOTH the `prism` and `code` roles — list that same repository under `prism`
+# AND as the sole `coreSolutionRepos` entry, for example:
+#
+#   prism:
+#     name: acme-app
+#     path: .
+#   coreSolutionRepos:
+#     - name: acme-app
+#       path: .
+#       description: The one repository holding both the prism and code roles.
+#
+# (In a single-repo topology you do NOT need to run /generate-context-prism.)
+
+# `prism` identifies the repository holding the `prism` role. Exactly one.
+prism:
+  name: team-name-prism
+  path: .
+
+# `coreSolutionRepos` identifies the repositories holding the `code` role.
+# These repos are owned by the team and will have code written to them.
+# They must be local repos on disk to allow for the full development experience.
+# In a single-repo topology, list the one repository here (the same one listed under `prism`).
+# Required fields: name, path. Optional fields: description
+
+coreSolutionRepos:
+  - name: orders-api
+    path: ../orders-api
+    description: Orders API service
+
+  - name: orders-client
+    path: ../orders-client
+    description: Orders front-end
+
+# Context repos are read-only repos used for product context.
+# Required fields: 
+# - name
+# - source or path 
+#   - path is for local repos on file system
+#   - source is for remote repos. Source requires:
+#     - type (eg. azure-devops, github)
+#     - url (the URL of the repository) 
+#     - branch (the branch to use)
+# Optional fields: contextPath, description
+# - contextPath: the path within the repository to use as progressive disclosure 
+#     context - do not define a remote context repo without a contextPath or it 
+#     will attempt to pull the whole repo!
+# - description: a brief description of the repo and its intended context.
+
+contextRepos:
+  - name: platform-contracts
+    source:
+      type: azure-devops
+      url: https://nintex.visualstudio.com/Nintex/_git/platform-contracts
+      branch: main
+    contextPath: .context
+    description: Shared contracts referenced for compatibility
+
+  - name: design-system
+    source:
+      type: github
+      url: https://github.com/NintexGlobal/design-system
+      branch: main
+    contextPath: .context
+    description: UI conventions and reusable component guidance
+
+  - name: vibranium-api
+    path: ../vibranium-api
+    contextPath: .context
+    description: Authentication and JWT handling service
+
