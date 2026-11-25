@@ -22,7 +22,7 @@
 
 # `prism` identifies the repository holding the `prism` role. Exactly one.
 prism:
-  name: #the `prism`-role repository name
+  name: PrismRepo
   path: .
 
 # `coreSolutionRepos` identifies the repositories holding the `code` role.
@@ -36,9 +36,9 @@ prism:
 # - description - a brief description of the repo and its intended purpose
 
 coreSolutionRepos:
-  - name: 
-    path: 
-    description: 
+  - name: PrismRepo
+    path: .
+    description: Single-repo topology. Holds both the prism role and the code role (the To-Do List API service and its tests).
 
 # Context repos are read-only repos used for product context.
 # Required fields: 
