@@ -51,12 +51,12 @@ The feature is deliberately small. Both user stories below are Must-have and tog
 
 - **FR-1**: Callers MUST be able to create a to-do item by supplying a title. The response MUST include the new item's unique identifier, its title, an incomplete status and its creation time.
 - **FR-2**: The system MUST reject a create request whose title is missing, empty, whitespace-only, or longer than 200 characters, returning an error that states which rule was broken, and MUST NOT create an item.
-- **FR-3**: Callers MUST be able to retrieve all to-do items. Each item MUST show its identifier, title, completion status and creation time, and items MUST be ordered oldest first by creation time.
+- **FR-3**: Callers MUST be able to retrieve all to-do items. Each item MUST show its identifier, title, completion status and creation time, and items MUST be ordered oldest first by creation time. Items with the same creation time MUST be ordered by when the system accepted each create, so the order is the same on every listing.
 - **FR-4**: When no to-do items exist, retrieving the list MUST return an empty list, not an error.
 - **FR-5**: Created items MUST still be returned by the list after the service restarts.
 - **FR-6**: Callers MUST be able to mark an existing to-do item complete by its identifier. After that, the list MUST show the item as complete, including after the service restarts.
 - **FR-7**: Marking an already-complete item complete MUST succeed and leave the item complete and otherwise unchanged.
-- **FR-8**: Marking an item complete using an identifier that does not exist MUST return a "not found" error that names the identifier, and MUST NOT change any item.
+- **FR-8**: Marking an item complete using an identifier that does not exist MUST return a "not found" error that names the identifier, and MUST NOT change any item. A malformed or empty identifier MUST get the same "not found" error.
 
 **Should have**
 
@@ -98,13 +98,20 @@ The feature is deliberately small. Both user stories below are Must-have and tog
 - **Single shared list**: all callers see and change one list. There are no per-user lists or ownership.
 - **Access control**: who may call the API follows the organisation's standing security standards. The plan phase decides how, and this spec adds no feature-specific permission rules.
 - **List size**: lists are expected to stay small (hundreds of items, not millions), so returning the whole list in one response is acceptable.
-- **Title limit**: 200 characters, counted as user-perceived characters.
+- **Title limit**: 200 characters, counted as user-perceived characters. Leading and trailing spaces are kept and count towards the limit.
 - **Timestamps**: creation and completion times are reported in UTC.
 - **Identifiers**: identifiers are assigned by the system, are unique, and never change or get reused.
 
 ### Investigations / Research / Notes
 
 - The scope is taken directly from the requester's one-line description. No customer research was supplied.
+
+## Clarifications
+
+### Session 2026-11-25 (QA)
+
+- Six test-plan decisions are recorded in [spec-qa.md](spec-qa.md). The only change to this spec: leading and trailing spaces in a title count towards the 200-character limit (Assumptions).
+- Four more test-plan decisions are recorded in [spec-qa.md](spec-qa.md). Changes to this spec: FR-3 now sets the order of items with the same creation time, and FR-8 now gives malformed or empty identifiers the same "not found" error.
 
 ## Dependencies
 
@@ -114,4 +121,4 @@ No dependencies on other teams at this time.
 
 | Aspect | File | Summary |
 | ------ | ---- | ------- |
-|        |      |         |
+| QA | [spec-qa.md](spec-qa.md) | Test levels, title boundary cases, restart and concurrency tests, error-code checks, test isolation, ordering ties, malformed identifiers and the CI release gate |
