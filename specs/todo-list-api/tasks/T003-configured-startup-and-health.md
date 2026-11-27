@@ -8,7 +8,7 @@ repository: PrismRepo
 parallel: false
 depends_on: [T001]
 effort: 3
-status: pending
+status: done
 ---
 
 # T003 — Start against a configured data file with fail-fast config and health endpoint
@@ -31,10 +31,10 @@ The service starts only when its required configuration is present, opens (creat
 - T001.
 
 ## Acceptance Criteria
-- [ ] Starting with any required setting missing fails fast, naming that setting and no secret value.
-- [ ] Starting with valid configuration and a fresh path creates the data file and serves `/health` as healthy without a token.
-- [ ] `/health` reports unhealthy when the data file location is not writable.
-- [ ] `/health` responses contain no item data.
+- [x] Starting with any required setting missing fails fast, naming that setting and no secret value.
+- [x] Starting with valid configuration and a fresh path creates the data file and serves `/health` as healthy without a token.
+- [x] `/health` reports unhealthy when the data file location is not writable.
+- [x] `/health` responses contain no item data.
 
 ## Testing Requirements
 - **Acceptance**: `/health` healthy on a fresh temporary data file; unhealthy when the store is unreachable; reachable without authentication. Each test run uses a fresh temporary data file (spec-qa isolation decision). Framework: xUnit with the ASP.NET Core in-process test host (`../research.md` R11; no `/.context/` yet).
