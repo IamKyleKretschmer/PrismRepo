@@ -8,7 +8,7 @@ repository: PrismRepo
 parallel: true
 depends_on: [T003]
 effort: 3
-status: pending
+status: done
 ---
 
 # T004 — Require a valid Vibranium JWT on every v1 request
@@ -32,10 +32,10 @@ Every request under `/v1` is rejected with `401` and code `unauthenticated` unle
 - T003 (JWT configuration settings exist).
 
 ## Acceptance Criteria
-- [ ] Each rejection case above returns `401` with `code: unauthenticated` in a problem-details body.
-- [ ] A valid test token reaches `/v1` routing (an unknown `/v1` path returns `404`, not `401`).
-- [ ] `/health` still answers without a token.
-- [ ] An unhandled failure returns `500` with a generic problem-details body.
+- [x] Each rejection case above returns `401` with `code: unauthenticated` in a problem-details body.
+- [x] A valid test token reaches `/v1` routing (an unknown `/v1` path returns `404`, not `401`).
+- [x] `/health` still answers without a token.
+- [x] An unhandled failure returns `500` with a generic problem-details body.
 
 ## Testing Requirements
 - **Acceptance**: every rejection case, the `ntx-user-id`-only case, a valid token, and `/health` without a token. A test signing key is set only in the test host (`../plan.md` § Test Strategy). Framework: xUnit with the ASP.NET Core in-process test host (`../research.md` R11).

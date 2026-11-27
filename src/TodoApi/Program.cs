@@ -8,6 +8,7 @@ builder.Services.AddTodoApi(builder.Configuration);
 
 var app = builder.Build();
 
+app.UseTodoApi();
 app.MapHealthChecks("/health").AllowAnonymous();
 
 try

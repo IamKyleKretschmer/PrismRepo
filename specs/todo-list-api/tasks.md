@@ -62,7 +62,7 @@ When work on a work item is complete, ensure the following criteria are met:
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
 - [X] T003 Start against a configured data file with fail-fast config and health endpoint → [tasks/T003-configured-startup-and-health.md](tasks/T003-configured-startup-and-health.md)
-- [ ] T004 [P] Require a valid Vibranium JWT on every v1 request → [tasks/T004-authenticate-v1-requests.md](tasks/T004-authenticate-v1-requests.md)
+- [X] T004 [P] Require a valid Vibranium JWT on every v1 request → [tasks/T004-authenticate-v1-requests.md](tasks/T004-authenticate-v1-requests.md)
 - [ ] T005 [P] Emit structured request logs and metrics without sensitive data → [tasks/T005-request-logging-and-metrics.md](tasks/T005-request-logging-and-metrics.md)
 
 **Checkpoint**: Service starts, `/health` answers, `/v1` is authenticated and logged safely.

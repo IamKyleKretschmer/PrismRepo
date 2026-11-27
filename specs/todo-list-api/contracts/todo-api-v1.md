@@ -42,6 +42,8 @@ Field names: `id`, `title`, `isComplete`, `createdAt`, `completedAt`. `completed
 
 Problem-details format (RFC 9457): `type`, `title`, `status`, `detail`, plus the stable extension `code`. The values of `code` are part of this contract. Tests and consumers check `code`, never the message wording (research R7). `detail` never repeats a title the caller supplied.
 
+Any operation can also return `500` with code `internal_error` and a generic `detail` when an unexpected failure occurs. Nothing about the failure's cause is returned, and callers may retry operations that are idempotent.
+
 ## Operational endpoint (not part of the public contract)
 
 `GET /health` reports whether the service is running and can reach its database. No authentication is needed, and it returns no item data.

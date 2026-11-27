@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace TodoApi.AcceptanceTests.Infrastructure;
 
@@ -7,12 +8,18 @@ namespace TodoApi.AcceptanceTests.Infrastructure;
 public sealed class TodoApiFactory : WebApplicationFactory<Program>
 {
     private readonly Dictionary<string, string?> _settings;
+    private readonly Action<IServiceCollection>? _configureServices;
     private readonly bool _ownsDataFile;
 
     /// <param name="dataFilePath">Reuse an existing data file (e.g. to restart); a fresh one is created when null.</param>
     /// <param name="settings">Overrides; a null value removes the setting.</param>
-    public TodoApiFactory(string? dataFilePath = null, IReadOnlyDictionary<string, string?>? settings = null)
+    /// <param name="configureServices">Test-only service overrides.</param>
+    public TodoApiFactory(
+        string? dataFilePath = null,
+        IReadOnlyDictionary<string, string?>? settings = null,
+        Action<IServiceCollection>? configureServices = null)
     {
+        _configureServices = configureServices;
         _ownsDataFile = dataFilePath is null;
         DataFilePath = dataFilePath ?? TestDataFile.NewPath();
 
@@ -37,6 +44,11 @@ public sealed class TodoApiFactory : WebApplicationFactory<Program>
         foreach (var (key, value) in _settings)
         {
             builder.UseSetting(key, value);
+        }
+
+        if (_configureServices is not null)
+        {
+            builder.ConfigureServices(_configureServices);
         }
     }
 

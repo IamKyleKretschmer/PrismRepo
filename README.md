@@ -31,6 +31,21 @@ The service refuses to start, naming each missing setting, unless all of these a
 
 Set exactly one of `Authentication__Authority` and `Authentication__SigningKey`.
 
+## Authentication
+
+Every `/v1` request needs a Vibranium JWT:
+
+```sh
+curl -H "Authorization: Bearer $TOKEN" http://localhost:5208/v1/todos
+```
+
+- **Mechanism**: the approved Vibranium JWT profile. The token must be signed by the configured key source, match `Authentication__Issuer` and `Authentication__Audience`, be unexpired (1 minute clock skew), and carry a `sub` claim.
+- **Identity source**: the `sub` claim only. The `ntx-user-id` header is never read, because no approved trusted path sits in front of this service.
+- **Authorisation**: any authenticated caller may use the shared list. There are no further permission checks.
+- **Rejections**: a missing, expired, wrongly signed, wrong-issuer or wrong-audience token, or one without `sub`, gets `401` with code `unauthenticated`, and nothing changes.
+- **Open endpoint**: only `/health` is reachable without a token.
+- **Local and test runs**: set `Authentication__SigningKey` to a base64 key of at least 256 bits, and sign HS256 tokens with it using the same issuer and audience. The acceptance tests do this with a key that exists only in the test host. Never use a symmetric key in a deployed environment; set `Authentication__Authority` instead.
+
 ## Health
 
 `GET /health` needs no token and returns no item data. It returns `200 Healthy` when the data file can be opened and written, and `503 Unhealthy` otherwise (for example, the file is read-only or its directory can't be created). Use it for liveness and readiness.
