@@ -18,7 +18,7 @@ This plan builds a new, single-instance HTTP service that lets authenticated cal
 - *Integrity*: no partial or lost writes. Every state change is one database transaction (research R3, R8).
 - *Concurrency*: 50 parallel creates give 50 distinct items, and parallel completes of one item give one completion time (spec-qa). Met by the transactional sequence and the conditional complete (research R4, R8).
 - *Performance*: listing a few hundred items returns in under 200 ms p95 on one instance. Met by an embedded store with no network hop and lists of a bounded size (spec Assumptions).
-- *Security*: every operation requires authentication (research R9).
+- *Security*: every operation requires authentication (research R9). Input size is bounded: titles are capped at 4,000 code points, and create request bodies at 64 KB (research R6).
 
 **Constraints**: One instance per data file. Scaling out requires a different store (see Feasibility & Risks).
 **Operations Impact**: There is a new CI pipeline, the service needs runtime JWT configuration, a persistent location for the data file, and a health endpoint. See Operations Plan.
@@ -117,7 +117,7 @@ The details are in [contracts/todo-api-v1.md](contracts/todo-api-v1.md).
 - **Flow (list)**: `Api/` authenticates → `Persistence/` reads every item ordered by creation time, then sequence → `Api/` returns `200`, with an empty array if there are none.
 - **Sync/async**: Everything happens synchronously within the request.
 - **Consistency & transaction boundaries**: One transaction per create. A list reads a consistent snapshot. Nothing is eventually consistent.
-- **Failure handling**: A validation failure returns `400` before storage is touched. A storage failure rolls the transaction back and returns `500` with a generic problem body, and the error is logged. The service never retries on the caller's behalf, because create is not idempotent.
+- **Failure handling**: A body over 64 KB is refused with `413` before it is read in full. A validation failure returns `400` before storage is touched. A storage failure rolls the transaction back and returns `500` with a generic problem body, and the error is logged. The service never retries on the caller's behalf, because create is not idempotent.
 
 ### US2 — Mark a to-do item complete
 
@@ -131,6 +131,7 @@ The details are in [contracts/todo-api-v1.md](contracts/todo-api-v1.md).
 | Principle | What it constrains | Architectural choice satisfying it | How it is verified |
 | --------- | ------------------ | ---------------------------------- | ------------------ |
 | 4 Security (auth standard) | Every operation | Vibranium JWT on every endpoint except `/health`. Identity from `sub` only, with `ntx-user-id` ignored (research R9) | Acceptance tests: missing, expired and invalid tokens get `401`, and the `ntx-user-id` header alone is rejected |
+| 4 Security (input validation) | Create requests | A 64 KB request body limit on `/v1` writes, plus a 4,000-code-point ceiling on titles next to the 200-grapheme rule (research R6) | Unit tests on both sides of the code-point ceiling. Acceptance tests: an oversized body gets `413 request_too_large`, and a title of 200 graphemes with stacked combining marks gets `400 title_too_large` |
 | 4 Privacy | Logs and telemetry | Titles and token contents are never logged. Caller identity is logged only as a correlation-safe subject identifier, and only at debug level | Unit test of the log scrubbing, plus code review against this row |
 | 5 Data integrity | Every write | One transaction per state change. Invariants in [data-model.md](data-model.md) | The "error changes nothing" checks from spec-qa, plus restart tests |
 | 7 Observability | Every request | Structured request logs with correlation ID, status code and error `code`. Request count and latency metrics. `/health` checks the database is reachable | Acceptance test of `/health`, and a log assertion on one error path |
@@ -157,7 +158,7 @@ Derived from [spec-qa.md](spec-qa.md).
 
 | Level | What it proves here | Repository & suite | Framework |
 | ----- | ------------------- | ------------------ | --------- |
-| Unit | Title rules and their boundaries (FR-2), plus the log scrubbing | PrismRepo: `tests/TodoApi.UnitTests/` | xUnit |
+| Unit | Title rules and their boundaries (FR-2), including the code-point ceiling, plus the log scrubbing | PrismRepo: `tests/TodoApi.UnitTests/` | xUnit |
 | Acceptance (black-box, in-process host) | Every FR through the real HTTP contract, including restart, concurrency, ordering, error codes and auth | PrismRepo: `tests/TodoApi.AcceptanceTests/` | xUnit with the ASP.NET Core test host |
 
 There is no `/.context/` in this repository yet, so the frameworks above come from the stack decision (research R11) rather than from repository context.

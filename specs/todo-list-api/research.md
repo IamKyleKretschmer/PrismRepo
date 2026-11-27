@@ -34,9 +34,9 @@ Phase 0 output for [plan.md](plan.md). One entry per decision: what was decided,
 
 ## R6. Title validation (FR-2)
 
-- **Decision**: A title is rejected when it is missing, empty, made only of whitespace (any Unicode whitespace), or longer than 200 user-perceived characters (grapheme clusters). Length includes leading and trailing whitespace, and accepted titles are stored byte-for-byte as supplied. Each rule has its own stable error code.
-- **Rationale**: Applies the spec's title Assumptions and the QA boundary decisions. Counting grapheme clusters means emoji and combined accented letters count as one character each.
-- **Alternatives rejected**: Counting UTF-16 code units, which miscounts emoji. Trimming titles, which contradicts "stored exactly as supplied".
+- **Decision**: A title is rejected when it is missing, empty, made only of whitespace (any Unicode whitespace), longer than 200 user-perceived characters (grapheme clusters), or larger than 4,000 Unicode code points (`title_too_large`). Length includes leading and trailing whitespace, and accepted titles are stored byte-for-byte as supplied. Each rule has its own stable error code. Separately, the server rejects any create request body over 64 KB with `413` (`request_too_large`) before the body is read in full.
+- **Rationale**: Applies the spec's title Assumptions and the QA boundary decisions. Counting grapheme clusters means emoji and combined accented letters count as one character each. Grapheme counting alone doesn't bound size: one cluster can carry any number of combining marks, so a "200-character" title could be megabytes. The code-point ceiling bounds storage and response size, and the body limit stops oversized payloads before they are parsed (constitution principle 4, input validation). The ceilings are generous: 200 × ~15-code-point emoji sequences ≈ 3,000 code points, and 4,000 code points is at most 16 KB of UTF-8.
+- **Alternatives rejected**: Counting UTF-16 code units, which miscounts emoji. Trimming titles, which contradicts "stored exactly as supplied". A UTF-8 byte limit in place of a code-point limit, which is harder for callers to reason about and penalises non-Latin scripts. Relying on the server's default body limit (about 30 MB), which is far larger than any valid request.
 
 ## R7. Error format
 

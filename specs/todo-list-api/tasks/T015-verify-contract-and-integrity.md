@@ -22,7 +22,7 @@ Prove that every operation matches the v1 contract field for field, every error 
 
 ## Behaviour & Contract
 - Per `../plan.md` § Cross-cutting behaviours: 3 Compatibility (`/v1` prefix, additive-only changes), 9 Localisation (stable `code` on every error, consumers localise from it), 5 Data integrity (one transaction per state change; errors change nothing).
-- Contract source: `../contracts/todo-api-v1.md` (item fields, status codes, error codes `title_missing`, `title_empty`, `title_blank`, `title_too_long`, `todo_not_found`, `unauthenticated`; RFC 9457 body).
+- Contract source: `../contracts/todo-api-v1.md` (item fields, status codes, error codes `title_missing`, `title_empty`, `title_blank`, `title_too_long`, `title_too_large`, `request_too_large`, `todo_not_found`, `unauthenticated`; RFC 9457 body).
 - Invariants: `../data-model.md` 1–7.
 
 ## Preconditions & Dependencies
@@ -32,7 +32,7 @@ Prove that every operation matches the v1 contract field for field, every error 
 - [ ] Contract tests assert the exact field set and types for the item representation on create, list and complete.
 - [ ] Every documented error `code` is produced by at least one test, with a problem-details body containing `type`, `title`, `status`, `detail` and `code`.
 - [ ] Renaming or removing any contract field or `code` makes a test fail.
-- [ ] Every error path (`400`, `401`, `404`) is followed by a listing proving nothing changed.
+- [ ] Every error path (`400`, `401`, `404`, `413`) is followed by a listing proving nothing changed.
 - [ ] No error `detail` repeats a caller-supplied title.
 
 ## Testing Requirements

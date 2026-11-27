@@ -50,7 +50,7 @@ The feature is deliberately small. Both user stories below are Must-have and tog
 **Must have**
 
 - **FR-1**: Callers MUST be able to create a to-do item by supplying a title. The response MUST include the new item's unique identifier, its title, an incomplete status and its creation time.
-- **FR-2**: The system MUST reject a create request whose title is missing, empty, whitespace-only, or longer than 200 characters, returning an error that states which rule was broken, and MUST NOT create an item.
+- **FR-2**: The system MUST reject a create request whose title is missing, empty, whitespace-only, longer than 200 characters, or larger than 4,000 Unicode code points, returning an error that states which rule was broken, and MUST NOT create an item. The system MUST also reject any create request whose body is larger than 64 KB, without creating an item.
 - **FR-3**: Callers MUST be able to retrieve all to-do items. Each item MUST show its identifier, title, completion status and creation time, and items MUST be ordered oldest first by creation time. Items with the same creation time MUST be ordered by when the system accepted each create, so the order is the same on every listing.
 - **FR-4**: When no to-do items exist, retrieving the list MUST return an empty list, not an error.
 - **FR-5**: Created items MUST still be returned by the list after the service restarts.
@@ -99,6 +99,8 @@ The feature is deliberately small. Both user stories below are Must-have and tog
 - **Access control**: who may call the API follows the organisation's standing security standards. The plan phase decides how, and this spec adds no feature-specific permission rules.
 - **List size**: lists are expected to stay small (hundreds of items, not millions), so returning the whole list in one response is acceptable.
 - **Title limit**: 200 characters, counted as user-perceived characters. Leading and trailing spaces are kept and count towards the limit.
+- **Title size ceiling**: a title may also hold at most 4,000 Unicode code points. A single user-perceived character can be built from an unlimited number of code points (for example, stacked combining marks), so the 200-character limit alone does not bound a title's size. The ceiling is high enough that 200 of the most complex emoji (about 15 code points each) are still accepted.
+- **Request size**: a create request body may be at most 64 KB. This comfortably fits the largest valid title.
 - **Timestamps**: creation and completion times are reported in UTC.
 - **Identifiers**: identifiers are assigned by the system, are unique, and never change or get reused.
 
@@ -112,6 +114,10 @@ The feature is deliberately small. Both user stories below are Must-have and tog
 
 - Six test-plan decisions are recorded in [spec-qa.md](spec-qa.md). The only change to this spec: leading and trailing spaces in a title count towards the 200-character limit (Assumptions).
 - Four more test-plan decisions are recorded in [spec-qa.md](spec-qa.md). Changes to this spec: FR-3 now sets the order of items with the same creation time, and FR-8 now gives malformed or empty identifiers the same "not found" error.
+
+### Session 2026-11-27 (cross-artifact analysis)
+
+- The 200-character limit counts user-perceived characters, which on their own do not bound a title's size. FR-2 now also rejects titles larger than 4,000 Unicode code points and create requests larger than 64 KB (Assumptions: Title size ceiling, Request size).
 
 ## Dependencies
 
