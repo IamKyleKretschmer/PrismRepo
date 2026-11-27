@@ -4,7 +4,7 @@ namespace TodoApi.Persistence;
 
 public sealed class TodoStore(TodoDatabase database, TimeProvider clock)
 {
-    /// <summary>Stores a new item. Creation time and sequence are assigned under the write lock, so they agree.</summary>
+    /// <summary>Creation time and sequence are assigned under the write lock, so they agree.</summary>
     public async Task<TodoItem> CreateAsync(string title, CancellationToken cancellationToken)
     {
         await using var connection = await database.OpenAsync(cancellationToken);

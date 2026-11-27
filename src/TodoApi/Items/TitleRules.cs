@@ -24,10 +24,7 @@ public static class TitleRules
     /// <summary>Bounds size, since one grapheme cluster can hold any number of combining marks.</summary>
     public const int MaxCodePoints = 4000;
 
-    /// <summary>
-    /// The first broken rule, checked in this order: missing, empty, too large, blank, too long.
-    /// Too large is checked before the costlier grapheme count, so it wins when both length rules are broken.
-    /// </summary>
+    /// <summary>The first broken rule, in order: missing, empty, too large, blank, too long.</summary>
     public static TitleProblem Check(string? title)
     {
         if (title is null)

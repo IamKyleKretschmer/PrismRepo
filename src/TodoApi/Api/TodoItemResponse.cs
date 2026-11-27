@@ -3,7 +3,6 @@ using TodoApi.Items;
 
 namespace TodoApi.Api;
 
-/// <summary>The v1 contract's item representation.</summary>
 public sealed record TodoItemResponse(
     string Id,
     string Title,

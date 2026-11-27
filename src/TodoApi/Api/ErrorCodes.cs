@@ -1,6 +1,6 @@
 namespace TodoApi.Api;
 
-/// <summary>Stable error codes from the v1 contract. Consumers and tests rely on these values.</summary>
+/// <summary>Stable error codes from the v1 contract.</summary>
 public static class ErrorCodes
 {
     public const string Unauthenticated = "unauthenticated";
