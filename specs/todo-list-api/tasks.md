@@ -48,7 +48,7 @@ When work on a work item is complete, ensure the following criteria are met:
 
 **Purpose**: A buildable service, runnable test suites, and a CI merge gate.
 
-- [ ] T001 Scaffold the service and its test suites → [tasks/T001-scaffold-service-and-test-suites.md](tasks/T001-scaffold-service-and-test-suites.md)
+- [X] T001 Scaffold the service and its test suites → [tasks/T001-scaffold-service-and-test-suites.md](tasks/T001-scaffold-service-and-test-suites.md)
 - [ ] T002 [P] Add CI pipeline that gates merging on all tests → [tasks/T002-ci-pipeline-merge-gate.md](tasks/T002-ci-pipeline-merge-gate.md)
 
 ---

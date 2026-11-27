@@ -8,7 +8,7 @@ repository: PrismRepo
 parallel: false
 depends_on: []
 effort: 2
-status: pending
+status: done
 ---
 
 # T001 — Scaffold the service and its test suites
@@ -30,11 +30,11 @@ No consumer-visible behaviour. Mandated constraints:
 - .NET 10 SDK installed on the development machine (`../plan.md` § Feasibility & Risks — only older runtimes are installed today).
 
 ## Acceptance Criteria
-- [ ] A clean clone builds the service and both test suites with no errors.
-- [ ] Both test suites run from the command line and report success.
-- [ ] The service starts locally and stops cleanly.
-- [ ] The layout matches `../plan.md` § Project Structure; item rules have no reference to the HTTP or storage layers.
-- [ ] Build output and local data files are ignored by git.
+- [x] A clean clone builds the service and both test suites with no errors.
+- [x] Both test suites run from the command line and report success.
+- [x] The service starts locally and stops cleanly.
+- [x] The layout matches `../plan.md` § Project Structure; item rules have no reference to the HTTP or storage layers.
+- [x] Build output and local data files are ignored by git.
 
 ## Testing Requirements
 - **Unit / acceptance**: each suite runs and is discoverable by the test runner. xUnit for unit tests; xUnit with the ASP.NET Core in-process test host for acceptance tests (`../plan.md` § Test Strategy, `../research.md` R11 — the repository has no `/.context/` yet).

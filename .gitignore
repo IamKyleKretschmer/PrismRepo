@@ -1,0 +1,27 @@
+# .NET build output
+bin/
+obj/
+artifacts/
+publish/
+TestResults/
+packages/
+*.user
+*.suo
+.vs/
+
+# Local To-Do data files (SQLite database plus WAL and shared-memory files)
+*.db
+*.db-wal
+*.db-shm
+data/
+
+# Local secrets
+.env
+.env.*
+
+# OS and editor
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
+.idea/
