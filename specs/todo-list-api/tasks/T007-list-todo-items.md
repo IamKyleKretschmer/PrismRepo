@@ -8,7 +8,7 @@ repository: PrismRepo
 parallel: false
 depends_on: [T006]
 effort: 3
-status: pending
+status: done
 ---
 
 # T007 — List all to-do items in a stable order
@@ -31,12 +31,12 @@ An authenticated caller can `GET /v1/todos` and receive every item, oldest first
 - T006 (items can be created).
 
 ## Acceptance Criteria
-- [ ] A fresh instance returns `200` with an empty `items` array.
-- [ ] After several creates, the list returns all of them oldest first with all contract fields.
-- [ ] Repeated listings return the exact same order.
-- [ ] Listing a few hundred items completes in under 200 ms p95 locally.
-- [ ] Cross-cutting: list without a valid token returns `401 unauthenticated`.
-- [ ] Cross-cutting: titles never appear in logs for this request.
+- [x] A fresh instance returns `200` with an empty `items` array.
+- [x] After several creates, the list returns all of them oldest first with all contract fields.
+- [x] Repeated listings return the exact same order.
+- [x] Listing a few hundred items completes in under 200 ms p95 locally.
+- [x] Cross-cutting: list without a valid token returns `401 unauthenticated`.
+- [x] Cross-cutting: titles never appear in logs for this request.
 
 ## Testing Requirements
 - **Acceptance**: empty list on a fresh data file; exact order after sequential creates; repeated listings identical; unauthenticated list. Framework: xUnit with the ASP.NET Core in-process test host (`../research.md` R11).

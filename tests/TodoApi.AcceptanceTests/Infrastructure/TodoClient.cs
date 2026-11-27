@@ -20,6 +20,18 @@ public static class TodoClient
         return await response.ReadJsonAsync();
     }
 
+    public static async Task<JsonElement[]> ListItemsAsync(this HttpClient client)
+    {
+        var response = await client.GetAsync("/v1/todos");
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var body = await response.ReadJsonAsync();
+        Assert.Equal(["items"], body.PropertyNames());
+        return body.GetProperty("items").EnumerateArray().ToArray();
+    }
+
+    public static string?[] Ids(this IEnumerable<JsonElement> items) =>
+        items.Select(i => i.GetProperty("id").GetString()).ToArray();
+
     public static async Task<JsonElement> ReadJsonAsync(this HttpResponseMessage response)
     {
         using var document = JsonDocument.Parse(await response.Content.ReadAsStringAsync());

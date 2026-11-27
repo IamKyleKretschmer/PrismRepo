@@ -10,8 +10,15 @@ public static class TodoEndpoints
         var todos = app.MapGroup("/v1/todos").RequireAuthorization();
 
         todos.MapPost("", CreateAsync);
+        todos.MapGet("", ListAsync);
 
         return app;
+    }
+
+    private static async Task<IResult> ListAsync(TodoStore store, CancellationToken cancellationToken)
+    {
+        var items = await store.ListAsync(cancellationToken);
+        return TypedResults.Ok(new TodoListResponse(items.Select(TodoItemResponse.From).ToList()));
     }
 
     private static async Task<IResult> CreateAsync(HttpRequest request, TodoStore store, CancellationToken cancellationToken)

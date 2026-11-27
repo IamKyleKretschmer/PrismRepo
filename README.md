@@ -53,6 +53,14 @@ curl -X POST http://localhost:5208/v1/todos \
 
 Returns `201 Created` with the new item and a `Location` header. The title is stored and returned exactly as sent, including leading and trailing spaces. Duplicate titles are allowed, and every successful request creates a new item, so don't retry a create blindly.
 
+### List items: `GET /v1/todos`
+
+```sh
+curl -H "Authorization: Bearer $TOKEN" http://localhost:5208/v1/todos
+```
+
+Returns `200 OK` with `{ "items": [ ... ] }` holding every item, oldest first. Items created in the same millisecond are ordered by when the service accepted each create, so the order is identical on every listing. With no items the response is `{ "items": [] }`, not an error. There is no paging: lists are expected to stay at hundreds of items.
+
 ## Authentication
 
 Every `/v1` request needs a Vibranium JWT:

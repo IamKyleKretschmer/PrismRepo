@@ -14,3 +14,5 @@ public sealed record TodoItemResponse(
     public static TodoItemResponse From(TodoItem item) =>
         new(item.Id, item.Title, item.IsComplete, item.CreatedAt, item.CompletedAt);
 }
+
+public sealed record TodoListResponse(IReadOnlyList<TodoItemResponse> Items);

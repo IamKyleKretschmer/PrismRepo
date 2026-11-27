@@ -80,7 +80,7 @@ When work on a work item is complete, ensure the following criteria are met:
 **Requirements**: FR-1, FR-2, FR-3, FR-4, FR-5
 
 - [X] T006 [US1] Create a to-do item → [tasks/T006-create-todo-item.md](tasks/T006-create-todo-item.md)
-- [ ] T007 [US1] List all to-do items in a stable order → [tasks/T007-list-todo-items.md](tasks/T007-list-todo-items.md)
+- [X] T007 [US1] List all to-do items in a stable order → [tasks/T007-list-todo-items.md](tasks/T007-list-todo-items.md)
 - [ ] T008 [P] [US1] Reject invalid titles with a specific error code → [tasks/T008-reject-invalid-titles.md](tasks/T008-reject-invalid-titles.md)
 - [ ] T009 [P] [US1] Keep created items across restarts and parallel creates → [tasks/T009-durable-concurrent-creates.md](tasks/T009-durable-concurrent-creates.md)
 
