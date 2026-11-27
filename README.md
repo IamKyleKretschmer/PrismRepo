@@ -53,6 +53,19 @@ curl -X POST http://localhost:5208/v1/todos \
 
 Returns `201 Created` with the new item and a `Location` header. The title is stored and returned exactly as sent, including leading and trailing spaces. Duplicate titles are allowed, and every successful request creates a new item, so don't retry a create blindly.
 
+**Title rules.** Length counts user-perceived characters, so an emoji (even a multi-person family with skin tones) or an accented letter counts as one. Leading and trailing spaces count too. Titles are never trimmed. When a title breaks more than one rule, the first matching row below wins.
+
+| Status | `code` | When |
+| ------ | ------ | ---- |
+| `413` | `request_too_large` | The request body is over 64 KB (65,536 bytes). The body isn't read past the limit. |
+| `400` | `title_missing` | No `title` field, a `title` that isn't a JSON string (including `null`), or a body that isn't a JSON object. |
+| `400` | `title_empty` | `title` is `""`. |
+| `400` | `title_too_large` | `title` is over 4,000 Unicode code points. This caps the size of titles built from stacked combining marks, which can stay within 200 characters. |
+| `400` | `title_blank` | `title` contains only whitespace (any Unicode whitespace: spaces, tabs, newlines, no-break spaces). |
+| `400` | `title_too_long` | `title` is over 200 characters. |
+
+A rejected create creates nothing, and the error `detail` never repeats the title.
+
 ### List items: `GET /v1/todos`
 
 ```sh

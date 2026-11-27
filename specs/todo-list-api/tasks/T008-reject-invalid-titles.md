@@ -8,7 +8,7 @@ repository: PrismRepo
 parallel: true
 depends_on: [T007]
 effort: 3
-status: pending
+status: done
 ---
 
 # T008 — Reject invalid titles with a specific error code
@@ -33,14 +33,14 @@ A create request whose title is missing, empty, whitespace-only, longer than 200
 - T007 (listing, used to prove nothing changed).
 
 ## Acceptance Criteria
-- [ ] Each rejected case in `../spec-qa.md` (no title, empty, spaces only, tabs only, newlines only, 201 characters) returns `400` with the matching `code` and a readable `detail`.
-- [ ] Each accepted boundary (1 character, 200 characters, 200 characters mixing emoji and accented letters, 200 characters with leading/trailing spaces) returns `201`.
-- [ ] A title of 4,000 code points that is within 200 graphemes returns `201`; a title of 4,001 code points that is within 200 graphemes (stacked combining marks) returns `400 title_too_large`.
-- [ ] 200 of the most complex emoji (multi-person ZWJ sequences with skin-tone modifiers) are accepted.
-- [ ] A create body just under 64 KB is processed normally (accepted or rejected by the title rules); a body over 64 KB returns `413 request_too_large` with a problem-details body.
-- [ ] After every rejection, listing shows no new item.
-- [ ] Cross-cutting: `detail` and logs never contain the supplied title.
-- [ ] Cross-cutting: tests assert `code`, never message wording.
+- [x] Each rejected case in `../spec-qa.md` (no title, empty, spaces only, tabs only, newlines only, 201 characters) returns `400` with the matching `code` and a readable `detail`.
+- [x] Each accepted boundary (1 character, 200 characters, 200 characters mixing emoji and accented letters, 200 characters with leading/trailing spaces) returns `201`.
+- [x] A title of 4,000 code points that is within 200 graphemes returns `201`; a title of 4,001 code points that is within 200 graphemes (stacked combining marks) returns `400 title_too_large`.
+- [x] 200 of the most complex emoji (multi-person ZWJ sequences with skin-tone modifiers) are accepted.
+- [x] A create body just under 64 KB is processed normally (accepted or rejected by the title rules); a body over 64 KB returns `413 request_too_large` with a problem-details body.
+- [x] After every rejection, listing shows no new item.
+- [x] Cross-cutting: `detail` and logs never contain the supplied title.
+- [x] Cross-cutting: tests assert `code`, never message wording.
 
 ## Testing Requirements
 - **Unit**: every FR-2 rule on both sides of each boundary, including grapheme counting for emoji and combining accents, Unicode whitespace variants, both sides of the 4,000-code-point ceiling, and the precedence rule when a title breaks both length rules. Framework: xUnit.

@@ -20,7 +20,7 @@ Field names: `id`, `title`, `isComplete`, `createdAt`, `completedAt`. `completed
 - **Purpose**: FR-1, FR-2.
 - **Request**: `title`.
 - **Success**: `201 Created`. The body is the new item, with `isComplete: false`. A `Location` header points to the item.
-- **Errors**: `400` with code `title_missing` (no `title` field, or the body can't be parsed), `title_empty`, `title_blank` (whitespace only), `title_too_long` (over 200 user-perceived characters) or `title_too_large` (over 4,000 Unicode code points). `413` with code `request_too_large` when the request body is over 64 KB. No item is created.
+- **Errors**: `400` with code `title_missing` (no `title` field, or the body can't be parsed), `title_empty`, `title_blank` (whitespace only), `title_too_long` (over 200 user-perceived characters) or `title_too_large` (over 4,000 Unicode code points). `413` with code `request_too_large` when the request body is over 64 KB. No item is created. A `title` that isn't a JSON string (including `null`) is treated as missing. When a title breaks several rules, the code reported is the first that applies in this order: `title_missing`, `title_empty`, `title_too_large`, `title_blank`, `title_too_long`.
 - **Idempotency**: Not idempotent. Each request that succeeds creates a new item, and duplicate titles are allowed (spec Considerations).
 
 ### List items — `GET /v1/todos`
