@@ -17,6 +17,10 @@ dotnet test tests/TodoApi.AcceptanceTests
 
 `dotnet test TodoApi.slnx` runs both suites.
 
+## CI
+
+[`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs on every pull request and every push to `main`/`master`: restore, build, unit tests, acceptance tests, then publishes the service package as the `todo-api` artefact. Make its **Build and test** job a required status check in branch protection so that a failing run blocks merging. The pipeline needs no secrets: acceptance tests use a signing key that exists only inside the test host.
+
 ## Layout
 
 | Path | Contents |

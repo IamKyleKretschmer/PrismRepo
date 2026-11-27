@@ -8,8 +8,10 @@ repository: PrismRepo
 parallel: true
 depends_on: [T001]
 effort: 3
-status: pending
+status: blocked
 ---
+
+> **Blocked (2026-11-27)**: the pipeline definition is written and every step passes when run locally, but none of the acceptance criteria can be confirmed without pushing a pull request and having repository admin rights to make **Build and test** a required check. Still to do: push the branch, open a PR, record a passing run and a deliberately failing run, confirm the `todo-api` artefact, and enable the required check. Also confirm the push trigger branches (`main`, `master`): the clone's `origin/HEAD` points at `feat/todo-list-api`.
 
 # T002 — Add CI pipeline that gates merging on all tests
 
