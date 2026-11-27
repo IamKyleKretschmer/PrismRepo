@@ -8,7 +8,7 @@ repository: PrismRepo
 parallel: true
 depends_on: [T007]
 effort: 3
-status: pending
+status: done
 ---
 
 # T009 — Keep created items across restarts and parallel creates
@@ -30,10 +30,10 @@ Items created before a restart are listed unchanged after it, and parallel creat
 - T007 (create and list exist).
 
 ## Acceptance Criteria
-- [ ] After creating items and restarting the host on the same data file, listing returns the same items with identical fields and order.
-- [ ] 50 parallel creates all return `201` with distinct identifiers, and listing returns exactly 50 items.
-- [ ] The listing order after the parallel creates is strictly ordered by creation time then acceptance order and identical across repeated listings.
-- [ ] Cross-cutting: no partial items exist after the parallel run (every listed item has all fields).
+- [x] After creating items and restarting the host on the same data file, listing returns the same items with identical fields and order.
+- [x] 50 parallel creates all return `201` with distinct identifiers, and listing returns exactly 50 items.
+- [x] The listing order after the parallel creates is strictly ordered by creation time then acceptance order and identical across repeated listings.
+- [x] Cross-cutting: no partial items exist after the parallel run (every listed item has all fields).
 
 ## Testing Requirements
 - **Acceptance**: restart test that stops and restarts the in-process host against the same temporary data file; 50-parallel-create test checking count, uniqueness and exact repeatable order. Both run in CI. Framework: xUnit with the ASP.NET Core in-process test host (`../research.md` R11).
