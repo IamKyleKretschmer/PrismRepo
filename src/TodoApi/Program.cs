@@ -11,6 +11,7 @@ var app = builder.Build();
 
 app.UseTodoApi();
 app.MapHealthChecks("/health").AllowAnonymous();
+app.MapTodoEndpoints();
 
 try
 {

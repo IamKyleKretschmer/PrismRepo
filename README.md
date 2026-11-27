@@ -31,6 +31,28 @@ The service refuses to start, naming each missing setting, unless all of these a
 
 Set exactly one of `Authentication__Authority` and `Authentication__SigningKey`.
 
+## API reference
+
+Base path `/v1`. JSON bodies; times are ISO 8601 UTC with millisecond precision. Errors use RFC 9457 problem details with a stable `code` field: check `code`, never the message wording.
+
+An item looks like this. `completedAt` appears only when `isComplete` is `true`.
+
+```json
+{ "id": "3f2c9a1e8b7d4c6a9e0f1a2b3c4d5e6f", "title": "Buy milk", "isComplete": false, "createdAt": "2026-11-27T09:30:12.345Z" }
+```
+
+Identifiers are opaque strings: don't parse them.
+
+### Create an item: `POST /v1/todos`
+
+```sh
+curl -X POST http://localhost:5208/v1/todos \
+  -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
+  -d '{"title":"Buy milk"}'
+```
+
+Returns `201 Created` with the new item and a `Location` header. The title is stored and returned exactly as sent, including leading and trailing spaces. Duplicate titles are allowed, and every successful request creates a new item, so don't retry a create blindly.
+
 ## Authentication
 
 Every `/v1` request needs a Vibranium JWT:

@@ -14,6 +14,7 @@ public static class PersistenceServiceCollectionExtensions
 
         services.TryAddSingleton(TimeProvider.System);
         services.AddSingleton<TodoDatabase>();
+        services.AddSingleton<TodoStore>();
         services.AddHostedService<DatabaseInitializer>();
         services.AddHealthChecks().AddCheck<DataStoreHealthCheck>("data-store");
 

@@ -5,4 +5,5 @@ public static class ErrorCodes
 {
     public const string Unauthenticated = "unauthenticated";
     public const string InternalError = "internal_error";
+    public const string TitleMissing = "title_missing";
 }

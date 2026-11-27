@@ -8,7 +8,7 @@ repository: PrismRepo
 parallel: false
 depends_on: [T004, T005]
 effort: 3
-status: pending
+status: done
 ---
 
 # T006 — Create a to-do item
@@ -33,12 +33,12 @@ An authenticated caller can `POST /v1/todos` with a valid title and gets back th
 - T004 (authentication and error body), T005 (logging with scrubbing).
 
 ## Acceptance Criteria
-- [ ] A valid create returns `201` with `id`, `title`, `isComplete: false` and a UTC ISO 8601 `createdAt`, and no `completedAt`.
-- [ ] Non-English text, emoji and leading/trailing spaces come back unchanged.
-- [ ] Two creates with the same title produce two items with different identifiers.
-- [ ] Cross-cutting: create without a valid token returns `401 unauthenticated` and creates nothing.
-- [ ] Cross-cutting: the title never appears in logs for this request.
-- [ ] Cross-cutting: response fields match the v1 contract names exactly.
+- [x] A valid create returns `201` with `id`, `title`, `isComplete: false` and a UTC ISO 8601 `createdAt`, and no `completedAt`.
+- [x] Non-English text, emoji and leading/trailing spaces come back unchanged.
+- [x] Two creates with the same title produce two items with different identifiers.
+- [x] Cross-cutting: create without a valid token returns `401 unauthenticated` and creates nothing.
+- [x] Cross-cutting: the title never appears in logs for this request.
+- [x] Cross-cutting: response fields match the v1 contract names exactly.
 
 ## Testing Requirements
 - **Acceptance**: successful create and its full response shape and `Location`; title round-trip for non-English, emoji and padded titles; duplicate titles; unauthenticated create. Each run starts on a fresh temporary data file. Framework: xUnit with the ASP.NET Core in-process test host (`../research.md` R11).
