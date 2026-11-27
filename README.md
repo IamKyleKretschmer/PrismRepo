@@ -50,6 +50,23 @@ curl -H "Authorization: Bearer $TOKEN" http://localhost:5208/v1/todos
 
 `GET /health` needs no token and returns no item data. It returns `200 Healthy` when the data file can be opened and written, and `503 Unhealthy` otherwise (for example, the file is read-only or its directory can't be created). Use it for liveness and readiness.
 
+## Logs and metrics
+
+Logs are JSON lines on stdout. Every request produces one entry from `TodoApi.Api.RequestLoggingMiddleware` with:
+
+| Field | Meaning |
+| ----- | ------- |
+| `CorrelationId` (scope) | The caller's `X-Correlation-ID` header if it is 1–64 characters of `A-Z a-z 0-9 . _ -`, otherwise the trace ID. Echoed in the `X-Correlation-ID` response header, and present on every log entry written during the request. |
+| `Method`, `Route` | HTTP method and route template (for example `/v1/todos/{id}/complete`), never the raw path. Unmatched paths log as `(unmatched)`. |
+| `StatusCode`, `ElapsedMilliseconds` | Response status and duration. |
+| `ErrorCode` | The contract's error `code`, on error responses only. |
+
+At `Debug` level a second entry, `Caller {CallerReference}`, records a 16-character SHA-256 prefix of the token's `sub`, so one caller's requests can be correlated without logging their identity.
+
+**Never logged**: request or response bodies (so no to-do titles, which may contain personal data), headers, tokens, or the raw `sub`.
+
+**Metrics**: ASP.NET Core's built-in `http.server.request.duration` histogram (meter `Microsoft.AspNetCore.Hosting`) gives request count and latency, tagged with `http.route`, `http.request.method` and `http.response.status_code`. It follows OpenTelemetry semantic conventions; attach any OpenTelemetry exporter to collect it.
+
 ## CI
 
 [`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs on every pull request and every push to `main`/`master`: restore, build, unit tests, acceptance tests, then publishes the service package as the `todo-api` artefact. Make its **Build and test** job a required status check in branch protection so that a failing run blocks merging. The pipeline needs no secrets: acceptance tests use a signing key that exists only inside the test host.

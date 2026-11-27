@@ -3,6 +3,7 @@ using TodoApi.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddTodoObservability();
 builder.Services.AddTodoPersistence(builder.Configuration);
 builder.Services.AddTodoApi(builder.Configuration);
 

@@ -19,6 +19,9 @@ public static class ApiServiceCollectionExtensions
 
     public static WebApplication UseTodoApi(this WebApplication app)
     {
+        // Outermost, so the logged status includes the exception handler's 500.
+        app.UseMiddleware<RequestLoggingMiddleware>();
+
         app.UseExceptionHandler(handler => handler.Run(context => ApiProblem.WriteAsync(
             context,
             StatusCodes.Status500InternalServerError,

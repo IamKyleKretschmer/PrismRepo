@@ -8,7 +8,7 @@ repository: PrismRepo
 parallel: true
 depends_on: [T003]
 effort: 3
-status: pending
+status: done
 ---
 
 # T005 — Emit structured request logs and metrics without sensitive data
@@ -29,10 +29,10 @@ Every request produces a structured log entry and request count/latency metrics 
 - T003.
 
 ## Acceptance Criteria
-- [ ] A request yields one structured log entry with correlation ID, route and status code; error responses also carry the error `code`.
-- [ ] Request count and latency metrics are emitted per route and status.
-- [ ] No log entry at any level contains a token or a request body.
-- [ ] Caller subject appears only at debug level.
+- [x] A request yields one structured log entry with correlation ID, route and status code; error responses also carry the error `code`.
+- [x] Request count and latency metrics are emitted per route and status.
+- [x] No log entry at any level contains a token or a request body.
+- [x] Caller subject appears only at debug level.
 
 ## Testing Requirements
 - **Unit**: the scrubbing rule — a request carrying a title and a token yields log output containing neither.
